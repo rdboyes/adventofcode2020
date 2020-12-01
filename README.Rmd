@@ -1,0 +1,15 @@
+---
+title: "README"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Advent of Code 2020
+
+Day 1: [Report Repair](day1.md)
+
+
+
