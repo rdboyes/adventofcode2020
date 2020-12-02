@@ -115,7 +115,7 @@ password_valid <- function(string_vector){
 password_valid(test_case)
 ```
 
-Seems like the problem is the `dplyr::between()` function. Weird. 
+Seems like the problem is the `dplyr::between()` function. Weird. On further digging, it appears that `between()` is not vectorized over the left and right side arguments, which is very confusing given the documentation's description: "This is a shortcut for x >= left & x <= right" - as this code IS vectorized over left and right.  
 
 ```{r}
 password_valid <- function(string_vector){

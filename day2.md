@@ -120,7 +120,11 @@ WTF?
     ##   total_valid
     ## 1           2
 
-Seems like the problem is the `dplyr::between()` function. Weird.
+Seems like the problem is the `dplyr::between()` function. Weird. On
+further digging, it appears that `between()` is not vectorized over the
+left and right side arguments, which is very confusing given the
+documentation’s description: “This is a shortcut for x &gt;= left & x
+&lt;= right” - as this code IS vectorized over left and right.
 
     password_valid <- function(string_vector){
       str_split(string_vector, " |-|: ") %>% 
