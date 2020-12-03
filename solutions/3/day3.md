@@ -1,0 +1,56 @@
+# Challenge 1
+
+We’re given a text file consisting of . and \# marks representing a map.
+We should be able to use `readr::read_fwf()` to turn this into a matrix:
+
+    library(readr)
+
+    input <- read_fwf(here::here("data/input_3.txt"), fwf_widths(rep(1, times = 31)))
+
+The challenge asks us to count trees starting from the top left and
+progressing right 3, down 1 each time. The landscape repeats to the
+right. Instead of actually repeating the landscape, we can “wrap” the
+horizontal index using a modulus.
+
+    library(purrr)
+
+    map_dbl(1:15, ~1 + ((3 * (. - 1)) %% 31))
+
+    ##  [1]  1  4  7 10 13 16 19 22 25 28 31  3  6  9 12
+
+    trees_hit <- function(landscape, slope){
+      h_ind <- map_dbl(1:nrow(landscape), ~1 + ((slope * (. - 1)) %% ncol(landscape)))
+      sum(map2_lgl(1:nrow(landscape), h_ind, ~landscape[.x, .y] == "#"))
+    }
+
+    trees_hit(input, 3)
+
+    ## [1] 282
+
+# Challenge 2
+
+The function as written will work for part 2, except for the last slope
+(Right 1, Down 2).
+
+    map_dbl(1:15, ~1 + ((.5 * .) %% 31))
+
+    ##  [1] 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0 5.5 6.0 6.5 7.0 7.5 8.0 8.5
+
+Slopes that are more “downhill” than right 1, down 1 produce fractional
+indexes in the current function. We can just filter the fractional
+indexes out (note the use of the “explode” pipe `%$%`):
+
+    library(dplyr)
+    library(magrittr)
+
+    trees_hit <- function(landscape, slope){
+      data.frame(v = 1:nrow(landscape)) %>% 
+        mutate(h = map_dbl(v, ~1 + ((slope * (. - 1)) %% ncol(landscape)))) %>%
+        filter(h %% 1 == 0) %$%   
+        map2_lgl(v, h, ~landscape[.x, .y] == "#") %>% 
+        sum()
+    }
+
+    map_dbl(c(0.5, 1, 3, 5, 7), ~trees_hit(input, .)) %>% prod()
+
+    ## [1] 958815792
