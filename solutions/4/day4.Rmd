@@ -19,6 +19,7 @@ library(purrr)
 library(magrittr)
 ```
 
+We've got a pretty messy file to read in. Never fear - between `stringr` and `janitor` we can make short work of this.
 
 ```{r}
 readr::read_file(here::here("data/input_4.txt")) %>% 
@@ -42,6 +43,8 @@ passport_data %>%
 ```
 
 ## Challenge 2
+
+We need to implement some validation rules. `pointblank` allows for custom data validation:
 
 ```{r}
 library(pointblank)
