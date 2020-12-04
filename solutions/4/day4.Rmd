@@ -63,7 +63,7 @@ passport_data %>% mutate(hgt_num = as.numeric(str_extract(hgt, "[0-9]+")),
   interrogate() -> valid_report
 ```
 
-!()[solutions/4/valid_report.png]
+![](solutions/4/valid_report.png)
 
 ```{r}
 get_sundered_data(valid_report, type = "pass") %>% nrow()
