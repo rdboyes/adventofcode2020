@@ -8,7 +8,8 @@
     library(magrittr)
 
 We’ve got a pretty messy file to read in. Never fear - between `stringr`
-and `janitor` we can make short work of this.
+and `janitor` we can make short work of this. We’re using
+`readr::read_file()` to read in the text as is.
 
     readr::read_file(here::here("data/input_4.txt")) %>% 
       str_split("\n\n") %>% 

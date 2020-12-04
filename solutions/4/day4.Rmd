@@ -19,7 +19,7 @@ library(purrr)
 library(magrittr)
 ```
 
-We've got a pretty messy file to read in. Never fear - between `stringr` and `janitor` we can make short work of this.
+We've got a pretty messy file to read in. Never fear - between `stringr` and `janitor` we can make short work of this. We're using `readr::read_file()` to read in the text as is.
 
 ```{r}
 readr::read_file(here::here("data/input_4.txt")) %>% 
@@ -61,6 +61,7 @@ passport_data %>% mutate(hgt_num = as.numeric(str_extract(hgt, "[0-9]+")),
   col_vals_regex(vars(pid), "^[0-9]{9}$") %>% 
   col_vals_between(vars(hgt_cm), 150, 193) %>% 
   interrogate() -> valid_report
+
 ```
 
 ![](solutions/4/valid_report.png)
