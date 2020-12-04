@@ -49,7 +49,7 @@ custom data validation:
       col_vals_between(vars(hgt_cm), 150, 193) %>% 
       interrogate() -> valid_report
 
-![](solutions/4/valid_report.png)
+![report](https://github.com/rdboyes/adventofcode2020/blob/master/valid_report.png?raw=true)
 
     get_sundered_data(valid_report, type = "pass") %>% nrow()
 
