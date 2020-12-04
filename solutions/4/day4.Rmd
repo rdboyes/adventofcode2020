@@ -1,6 +1,6 @@
 ---
 title: "Day 4"
-output: html_document
+output: md_document
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
