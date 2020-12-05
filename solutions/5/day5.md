@@ -1,5 +1,9 @@
 ## Challenge 1
 
+The numbers are essentially provided in an encoded variation of binary.
+We read and convert them to real binary, then use the row and column
+numbers to find the seat id numbers.
+
     library(readr)
     library(dplyr)
     library(stringr)
@@ -15,17 +19,21 @@
         strtoi(base = 2)
     }
 
-    max(decode(input$row) * 8 + decode(input$col, one = "R", zero = "L"))
+    seats <- data.frame(row = decode(input$row), col = decode(input$col, one = "R", zero = "L")) %>% 
+      mutate(id = row * 8 + col)
+
+Finding the highest id number from here is simple:
+
+    max(seats$id)
 
     ## [1] 994
 
 ## Challenge 2
 
-    library(ggplot2)
+We can find the expected sum of id’s between the lowest and highest id
+if all were present, then compare to the actual sum to find the missing
+value.
 
-    data.frame(row = decode(input$row), col = decode(input$col, one = "R", zero = "L"), occ = 1) %>% 
-      ggplot(aes(y = row, x = col, fill = occ), colour = "black") + geom_tile() +
-      theme_minimal() +
-      theme(legend.position = "none")
+    0.5 * (max(seats$id) - min(seats$id) + 1) * (max(seats$id) + min(seats$id)) - sum(seats$id)
 
-<img src="day5_files/figure-markdown_strict/unnamed-chunk-2-1.png" width="50%" />
+    ## [1] 741
