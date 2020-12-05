@@ -32,12 +32,13 @@ max(decode(input$row) * 8 + decode(input$col, one = "R", zero = "L"))
 
 ## Challenge 2
 
-```{r, out.width="50%"}
+```{r, out.width="50%", fig.height = 8}
 library(ggplot2)
 
 data.frame(row = decode(input$row), col = decode(input$col, one = "R", zero = "L"), occ = 1) %>% 
   ggplot(aes(y = row, x = col, fill = occ), colour = "black") + geom_tile() +
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position = "none")
   
 ```
 

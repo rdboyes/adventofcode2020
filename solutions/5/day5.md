@@ -25,6 +25,7 @@
 
     data.frame(row = decode(input$row), col = decode(input$col, one = "R", zero = "L"), occ = 1) %>% 
       ggplot(aes(y = row, x = col, fill = occ), colour = "black") + geom_tile() +
-      theme_minimal()
+      theme_minimal() +
+      theme(legend.position = "none")
 
 <img src="day5_files/figure-markdown_strict/unnamed-chunk-2-1.png" width="50%" />
