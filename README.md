@@ -9,3 +9,5 @@ Day 3: [Toboggan Trajectory](solutions/3/day3.md)
 Day 4: [Passport Processing](solutions/4/day4.md)
 
 Day 5: [Binary Boarding](solutions/5/day5.md)
+
+Day 6: [Custom Customs](solutions/6/day6.md)
