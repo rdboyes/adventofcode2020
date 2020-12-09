@@ -24,3 +24,5 @@ Day 6: [Custom Customs](solutions/6/day6.md)
 Day 7: [Handy Haversacks](solutions/7/day7.md)
 
 Day 8: [Handheld Halting](solutions/8/day8.md)
+
+Day 9: [Encoding Error](solution/9/day9.rmd)
