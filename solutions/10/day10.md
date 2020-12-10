@@ -21,6 +21,8 @@ Weirdly easy after the last few:
 
     ## [1] 1998
 
+## Challenge 2
+
 Every jump of 3 narrows the possibilities - there is only one legal way
 to cross a gap of 3. Every stretch of 1’s of the same length will have
 the same number of branching paths. There aren’t any 2’s in the data.

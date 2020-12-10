@@ -25,6 +25,6 @@ Day 7: [Handy Haversacks](solutions/7/day7.md)
 
 Day 8: [Handheld Halting](solutions/8/day8.md)
 
-Day 9: [Encoding Error](solutions/9/day9.rmd)
+Day 9: [Encoding Error](solutions/9/day9.md)
 
-Day 10: [Adapter Array](solutions/10/day10.rmd)
+Day 10: [Adapter Array](solutions/10/day10.md)
