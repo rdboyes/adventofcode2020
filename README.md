@@ -19,3 +19,5 @@ Day 8: [Handheld Halting](solutions/8/day8.md)
 Day 9: [Encoding Error](solutions/9/day9.md)
 
 Day 10: [Adapter Array](solutions/10/day10.md)
+
+Day 11: [Seating System](solutions/11/day11.md)
