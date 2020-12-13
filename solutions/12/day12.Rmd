@@ -1,0 +1,74 @@
+---
+title: "Day 12"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+## Challenge 1
+
+```{r}
+library(readr)
+library(tidyr)
+library(tibble)
+library(dplyr)
+library(magrittr)
+```
+
+```{r}
+tibble(input = read_lines(here::here("data/input_12.txt"))) %>% 
+  separate(input, sep = 1, into = c("dir", "value")) %>% 
+  mutate(value = as.numeric(value)) -> directions 
+
+directions %>% 
+  mutate(heading = case_when(dir == "E" ~ 0,
+                             dir == "S" ~ 90,
+                             dir == "W" ~ 180,
+                             dir == "N" ~ 270)) %>% 
+  mutate(value = ifelse(dir == "L", -value, value))  %>% 
+  mutate(heading_t = cumsum(ifelse(dir %in% c("R", "L"), value, 0)) %% 360) %>% 
+  mutate(heading = coalesce(heading, heading_t)) %>% 
+  filter(!dir %in% c("R", "L")) %>% 
+  group_by(heading) %>% 
+  summarize(total = sum(value)) %>% 
+  pull(total) %>% 
+  (function(x){abs(x[1] - x[3]) + abs(x[2] - x[4])})
+```
+
+```{r}
+move_waypoint <- function(start, dir, value){
+  if(value == 180){return(c(-start[1], -start[2]))}
+  if(value == 270){
+    if(dir == "R"){return(c(-start[2], start[1]))}
+    if(dir == "L"){return(c(start[2], -start[1]))}
+    
+  }
+  if(dir == "N"){return(c(start[1], start[2] + value))}
+  if(dir == "S"){return(c(start[1], start[2] - value))}
+  if(dir == "E"){return(c(start[1] + value, start[2]))}
+  if(dir == "W"){return(c(start[1] - value, start[2]))}
+  if(dir == "R"){return(c(start[2], -start[1]))}
+  if(dir == "L"){return(c(-start[2], start[1]))}
+  if(dir == "F"){return(c(start[1], start[2]))}
+}
+
+waypoint_path <- list(c(10, 1))
+
+for(i in 1:nrow(directions)){
+  waypoint_path[[i + 1]] <- move_waypoint(waypoint_path[[i]], directions$dir[i], directions$value[i])
+}
+
+do.call(rbind.data.frame, waypoint_path) %>% 
+  slice(2:n()) %>% 
+  set_colnames(c("w_x", "w_y")) %>% 
+  cbind(directions, .) %>% 
+  mutate(x = cumsum((dir == "F") * value * w_x),
+         y = cumsum((dir == "F") * value * w_y)) %>% 
+  slice(n()) %>% 
+  select(x, y)
+```
+

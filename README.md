@@ -21,3 +21,5 @@ Day 9: [Encoding Error](solutions/9/day9.md)
 Day 10: [Adapter Array](solutions/10/day10.md)
 
 Day 11: [Seating System](solutions/11/day11.md)
+
+Day 12: [Rain Risk](solutions/12/day12.md)
