@@ -1,0 +1,50 @@
+---
+title: "Day 15"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+
+options(scipen = 999)
+```
+
+## Challenge 1
+
+```{r}
+numbers <- c(7,12,1,0,16,2)
+
+for(i in 7:2020){
+  if (!numbers[i-1] %in% numbers[1:(i-2)]){numbers[i] <- 0}
+  else {numbers[i] <- i - 1 - max(which(numbers[1:(i-2)] == numbers[i-1]))}
+}
+
+numbers[2020]
+```
+
+## Challenge 2
+
+There must be a better way!
+
+```{r}
+library(hash)
+
+numbers <- hash("7" = 1, "12" = 2, "1" = 3, "0" = 4, "16" = 5)
+next_num <- 2
+
+for(i in 6:(30000000 - 1)){
+  if (!has.key(as.character(next_num), numbers)){
+    numbers[[as.character(next_num)]] <- i
+    next_num <- 0
+  }else{
+    n <- next_num
+    next_num <- i - numbers[[as.character(next_num)]]
+    numbers[[as.character(n)]] <- i
+  }
+}
+
+next_num
+```
+

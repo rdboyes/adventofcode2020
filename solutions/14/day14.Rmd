@@ -1,0 +1,80 @@
+---
+title: "Day 14"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+
+options(scipen = 999)
+```
+
+## Challenge 1
+
+```{r}
+library(readr)
+library(tibble)
+library(tidyr)
+library(stringr)
+library(dplyr)
+library(binaryLogic)
+library(purrr)
+```
+
+
+```{r}
+tibble(data = read_lines(here::here("data/input_14.txt"))) %>% 
+  separate(data, into = c("com", "add", "value"), sep = " = |\\[") %>% 
+  mutate(add = str_remove(add, "]"), 
+         mask_num = cumsum(com == "mask")) -> ferry
+
+as_binary <- function(str){
+  if(str_length(str) %% 8 != 0){str <- str_pad(str, str_length(str) + str_length(str) %/% 8, "left", "0")}
+  raw <- list()
+  for(i in 1:(str_length(str)/8)){
+    raw[[i]] <- substr(str, 8*i - 7, 8*i) %>% strtoi(base = 2) %>% as.raw()
+  }
+  return(unlist(raw))
+}
+```
+
+
+```{r}
+ferry %>% filter(com == "mask") %>% 
+  select(mask_num, mask = add) %>% 
+  mutate(zero_mask = str_replace_all(mask, "X", "1"),
+         one_mask = str_replace_all(mask, "X", "0")) %>% 
+  left_join(filter(ferry, !com == "mask"), ., by = "mask_num") -> ferry2
+
+value <- map(ferry2$value, ~as.binary(.) %>% 
+                 as.character() %>% 
+                 reduce(paste0) %>% 
+                 str_pad(width = 40, side = "left", pad = "0") %>% 
+                 as_binary()) 
+
+zero_masks <- map(ferry2$zero_mask, as_binary)
+one_masks <- map(ferry2$one_mask, as_binary)
+```
+
+```{r}
+result <- list()
+value_final <- 0
+
+for(i in 1:length(value)){
+  result[[i]] <- (value[[i]] | one_masks[[i]]) & zero_masks[[i]]
+  value_final[i] <- as.numeric(result[[i]][5]) +
+           as.numeric(result[[i]][4]) * 2^8 +
+           as.numeric(result[[i]][3]) * 2^16 +
+           as.numeric(result[[i]][2]) * 2^24 +
+           as.numeric(result[[i]][1]) * 2^32
+}
+
+ferry3 <- cbind(ferry2, value_final) %>% rowid_to_column() %>% 
+  group_by(add) %>% 
+  slice(which.max(rowid))
+
+sum(ferry3$value_final)
+```
+

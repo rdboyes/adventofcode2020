@@ -23,3 +23,7 @@ Day 10: [Adapter Array](solutions/10/day10.md)
 Day 11: [Seating System](solutions/11/day11.md)
 
 Day 12: [Rain Risk](solutions/12/day12.md)
+
+Day 13: [Shuttle Search](solutions/13/day13.md)
+
+Day 14: [Docking Data](solutions/14/day14.md)
