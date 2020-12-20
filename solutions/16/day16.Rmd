@@ -54,11 +54,13 @@ rule_followed <- matrix(nrow = 20, ncol = 20)
 
 for(i in 1:20){
   for(j in 1:20){
-    rule_followed[i,j] <- sum((rules$low1[j] <= number_matrix[,i] & rules$high1[j] >= number_matrix[,i]) | (rules$low2[j] <= number_matrix[,i] & rules$high2[j] >= number_matrix[,i])) == 190
+    rule_followed[i,j] <- sum((rules$low1[j] <= number_matrix[,i] & rules$high1[j] >= number_matrix[,i]) |
+                                (rules$low2[j] <= number_matrix[,i] & rules$high2[j] >= number_matrix[,i])) == 190
   }
 }
 
-pivot_longer(as.data.frame(rule_followed) %>% rowid_to_column(), -rowid, names_to = "rule", names_prefix = "V", values_to = "possible_match") %>% 
+pivot_longer(as.data.frame(rule_followed) %>% rowid_to_column(),
+             -rowid, names_to = "rule", names_prefix = "V", values_to = "possible_match") %>% 
   filter(possible_match) -> rule_matches
 
 solution <- list()

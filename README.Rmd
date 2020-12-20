@@ -40,3 +40,11 @@ Day 14: [Docking Data](solutions/14/day14.md)
 Day 15: [Rambunctious Recitation](solutions/15/day15.md)
 
 Day 16: [Ticket Translation](solutions/16/day16.md)
+
+Day 17: [Conway Cubes](solutions/17/day17.md)
+
+Day 18: [Operation Order](solutions/18/day18.md)
+
+Day 19: [Monster Messages](solutions/19/day19.md)
+
+Day 20: [Jurassic Jigsaw](solutions/20/day20.md)

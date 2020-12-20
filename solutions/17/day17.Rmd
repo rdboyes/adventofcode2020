@@ -1,0 +1,123 @@
+---
+title: "Day 17"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+
+options(scipen = 999)
+```
+
+## Challenge 1
+
+We can use some of the code from [Day 11](solutions/11/day11.md) and adapt it for the three dimensional case.
+
+```{r}
+library(readr)
+library(tidyr)
+library(stringr)
+library(dplyr)
+library(purrr)
+library(tibble)
+
+input <- read_lines(here::here("data/input_17.txt")) %>% 
+  str_replace_all("#", "1") %>% 
+  str_replace_all("\\.", "0") %>% 
+  strsplit("") %>% 
+  do.call(rbind.data.frame, .) %>% 
+  mutate_all(as.numeric) %>% 
+  mutate_all(as.logical) %>% 
+  as.matrix()
+```
+
+```{r}
+n_iter <- 6
+x_dim <- nrow(input) + 2 + 2 * n_iter
+y_dim <- ncol(input) + 2 + 2 * n_iter
+z_dim <- 3 + 2 * n_iter
+
+space <- array(NA, c(x_dim, y_dim, z_dim))
+space[2:(x_dim - 1), 2:(y_dim - 1), 2:(2 + 2 * n_iter)] <- FALSE
+space[(2 + n_iter):(x_dim - 1 - n_iter),(2 + n_iter):(y_dim - 1 - n_iter),(2 + n_iter)] <- input
+```
+
+
+```{r}
+state_adjacent <- function(row, col, z, data){
+  state <- data[row, col, z]
+  if(is.na(state)){return(NA)}
+  
+  sum <- sum(data[(row - 1):(row + 1), (col - 1):(col + 1), (z + 1):(z - 1)], na.rm = T)
+  if(state == TRUE && (sum == 3 || sum == 4)){return(TRUE)}
+  if(state == FALSE && sum == 3){return(TRUE)}
+  return(FALSE)
+}
+
+run_sim <- function(state_function, stop_rule){
+  state_list <- list()
+  state_list[[1]] <- space
+  i <- 1
+
+  while(TRUE){
+    state_list[[i + 1]] <- pmap_lgl(expand.grid(1:x_dim, 1:y_dim, 1:z_dim), ~state_function(..1, ..2, ..3, state_list[[i]])) %>% 
+      array(dim = c(x_dim, y_dim, z_dim))
+    i <- i + 1
+    if(eval(parse(text = stop_rule))){break}
+  }
+
+  return(state_list)
+}
+
+part1 <- run_sim(state_adjacent, stop_rule = "i > 6")
+sum(part1[[length(part1)]], na.rm = T)
+```
+
+## Challenge 2
+
+Again, but in 4d.
+
+```{r}
+n_iter <- 6
+x_dim <- nrow(input) + 2 + 2 * n_iter
+y_dim <- ncol(input) + 2 + 2 * n_iter
+z_dim <- 3 + 2 * n_iter
+w_dim <- 3 + 2 * n_iter
+
+space <- array(NA, c(x_dim, y_dim, z_dim, w_dim))
+space[2:(x_dim - 1), 2:(y_dim - 1), 2:(2 + 2 * n_iter), 2:(2 + 2 * n_iter)] <- FALSE
+space[(2 + n_iter):(x_dim - 1 - n_iter),(2 + n_iter):(y_dim - 1 - n_iter),(2 + n_iter), (2 + n_iter)] <- input
+```
+
+
+```{r}
+state_adjacent <- function(row, col, z, w, data){
+  state <- data[row, col, z, w]
+  if(is.na(state)){return(NA)}
+  
+  sum <- sum(data[(row - 1):(row + 1), (col - 1):(col + 1), (z + 1):(z - 1), (w - 1):(w + 1)], na.rm = T)
+  if(state == TRUE && (sum == 3 || sum == 4)){return(TRUE)}
+  if(state == FALSE && sum == 3){return(TRUE)}
+  return(FALSE)
+}
+
+run_sim <- function(state_function, stop_rule){
+  state_list <- list()
+  state_list[[1]] <- space
+  i <- 1
+
+  while(TRUE){
+    state_list[[i + 1]] <- pmap_lgl(expand.grid(1:x_dim, 1:y_dim, 1:z_dim, 1:w_dim), ~state_function(..1, ..2, ..3, ..4, state_list[[i]])) %>% 
+      array(dim = c(x_dim, y_dim, z_dim, w_dim))
+    i <- i + 1
+    if(eval(parse(text = stop_rule))){break}
+  }
+
+  return(state_list)
+}
+
+part2 <- run_sim(state_adjacent, stop_rule = "i > 6")
+sum(part2[[length(part2)]], na.rm = T)
+```
