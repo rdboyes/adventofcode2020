@@ -26,6 +26,7 @@ library(dplyr)
 library(stringr)
 library(readr)
 library(tibble)
+library(purrr)
 
 add <- function(x, y){x + y}
 mult <- function(x, y){x * y}
